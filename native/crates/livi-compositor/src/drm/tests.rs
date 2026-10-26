@@ -1,4 +1,6 @@
-use super::{Offered, assign, choose, panel_name, size_of, wl_output_in};
+use smithay::backend::input::TouchSlot;
+
+use super::{Offered, assign, choose, panel_name, size_of, touch_id, wl_output_in};
 
 fn mode(w: u16, h: u16, refresh: u32, preferred: bool) -> Offered {
     Offered {
@@ -114,6 +116,13 @@ fn a_touch_device_names_its_display_in_the_udev_data() {
     );
     assert_eq!(wl_output_in("E:ID_INPUT=1\n"), None);
     assert_eq!(wl_output_in("E:WL_OUTPUT=\n"), None);
+}
+
+#[test]
+fn a_single_touch_panel_touches_with_slot_zero() {
+    assert_eq!(touch_id(TouchSlot::from(None)), 0);
+    assert_eq!(touch_id(TouchSlot::from(Some(0))), 0);
+    assert_eq!(touch_id(TouchSlot::from(Some(3))), 3);
 }
 
 #[test]

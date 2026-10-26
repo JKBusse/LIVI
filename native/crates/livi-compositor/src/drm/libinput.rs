@@ -140,8 +140,10 @@ pub(super) fn input(state: &mut LiviState, event: InputEvent<LibinputInputBacken
     }
 }
 
+// A single-touch panel reports no slot, which smithay turns into -1. The core reads
+// touch ids as u32 and drops the whole frame, so projection never saw the touch.
 pub(super) fn touch_id(slot: smithay::backend::input::TouchSlot) -> i32 {
-    i32::from(slot)
+    i32::from(slot).max(0)
 }
 
 pub(super) fn key(
